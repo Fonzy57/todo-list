@@ -1,0 +1,19 @@
+Notre système d’application TODO List commence à prendre forme.
+
+Un utilisateur (User) contient les informations suivantes:
+    Un identifiant unique (id) généré automatiquement à la création et en lecture seule
+    Un prénom (firstName)
+
+Une tâche (Task) peut contenir les informations suivantes:
+    Un identifiant unique (id) généré automatiquement à la création et en lecture seule
+    Un titre (title)
+    Une description (description)
+    Un indicateur de completion (“done”)
+    Une référence à l’utilisateur l’ayant crée
+
+Additionnellement, une tâche avec échéance (DatedTask) est un type de tâche particulier contenant une information supplémentaire:
+    Une date d’échéance (dueDate)
+
+Créez le diagramme UML de ces objets, puis leurs implémentations avec les méthodes equals, hashCode et toString.
+
+Modifiez votre programme pour être capable de lister, créer, supprimer et modifier les tâches.
