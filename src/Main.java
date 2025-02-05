@@ -3,14 +3,14 @@ import task.Task;
 import java.util.ArrayList;
 
 public class Main {
-  public static void main (String[] args) {
+  public static void main(String[] args) {
     ArrayList<Task> tasks = new ArrayList<>();
+    ArrayList<User> users = new ArrayList<>();
 
-    User steph = new User(1, "Steph");
-    User hubert = new User(2, "Hubert");
+    User steph = new User("Steph");
+    User hubert = new User("Hubert");
 
     Task clean = new Task(
-        1,
         "Laver la maison",
         "Laver la maison, c'est à dire passer l'aspirateur et la serpillères",
         false,
@@ -18,7 +18,6 @@ public class Main {
     );
 
     Task cleanCar = new Task(
-        2,
         "Laver la voiture",
         "Laver la voiture en allant à l'éléphant bleu",
         true,
@@ -26,7 +25,6 @@ public class Main {
     );
 
     Task shopping = new Task(
-        3,
         "Faire les courses",
         "Aller à Cora pour faire les courses. Voici la liste des aliments à acheter : \n  Pomme,\n  Dinde,\n  Pâtes," +
             "\n  Riz,\n  Pesto,\n  Pepsi,\n  Monster",
@@ -38,14 +36,25 @@ public class Main {
     tasks.add(cleanCar);
     tasks.add(shopping);
 
+    users.add(steph);
+    users.add(hubert);
+
 
     getTasks(tasks);
+    getUsers(users);
   }
 
   // LISTING TASKS
-  public static void getTasks (ArrayList<Task> tasks) {
+  public static void getTasks(ArrayList<Task> tasks) {
     for (Task task : tasks) {
       System.out.println(task + "\n");
+    }
+  }
+
+  // LISTING USERS
+  public static void getUsers(ArrayList<User> users) {
+    for (User user : users) {
+      System.out.println(user + "\n");
     }
   }
 }
