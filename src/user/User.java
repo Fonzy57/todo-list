@@ -1,22 +1,28 @@
+package user;
+
 import static java.lang.Math.round;
 
 public class User {
-  private static double idCounter = 0; // Compteur global pour générer des IDs uniques
-  private final double id; // ID unique de chaque tâche (non statique)
+  private static int count = -1;
+
+  static {
+    count = -1;
+  }
+
+  {
+    count++;
+  }
+
+  private final long id; // ID unique de chaque tâche (non statique)
   private String firstName;
 
   public User(String firstName) {
-    id = generateId(); // Génère un ID unique à chaque création d'une tâche
+    id = count; // Génère un ID unique à chaque création d'une tâche
     this.firstName = firstName;
   }
 
-  // ID INCREMENT
-  public static double generateId() {
-    return idCounter++; // Incrémente le compteur global
-  }
-
   // GETTERS AND SETTERS
-  public double getId() {
+  public long getId() {
     return id;
   }
 
