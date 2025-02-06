@@ -14,32 +14,32 @@ public class Main {
     DatabaseAccess bdd = DatabaseAccess.getInstance();
 
     // TASKS
-//    List<Task> allTasks = bdd.getAllTasks();
-//
-//    Task taskId1 = bdd.getTaskById(idToSearchTask);
-//
-//    Task newTask = new Task(
-//        "Dormir",
-//        "Se coucher tôt pour être en forme pour le cours JAVA",
-//        false,
-//        bdd.getUserById(0)
-//    );
-//
-//    Task testBuilder = new TaskBuilder()
-//        .setCreator(bdd.getUserById(0))
-//        .setDone(true)
-//        .setTitle("Mon titre")
-//        .setDescription("Ma description")
-//        .build();
-//
-//    bdd.addTask(newTask);
-//    bdd.addTask(testBuilder);
-//
-//    bdd.deleteTaskById(0);
-//
-//    System.out.println("Tâche avec l'ID " + idToSearchTask + " : \n" + taskId1);
-//
-//    displayAllTasks(allTasks);
+    List<Task> allTasks = bdd.getAllTasks();
+
+    Task taskId1 = bdd.getTaskById(idToSearchTask);
+
+    Task newTask = new Task(
+        "Dormir",
+        "Se coucher tôt pour être en forme pour le cours JAVA",
+        false,
+        bdd.getUserById(0)
+    );
+
+    Task testBuilder = new TaskBuilder()
+        .setCreator(bdd.getUserById(0))
+        .setDone(true)
+        .setTitle("Mon titre")
+        .setDescription("Ma description")
+        .build();
+
+    bdd.addTask(newTask);
+    bdd.addTask(testBuilder);
+
+    bdd.deleteTaskById(0);
+
+    System.out.println("Tâche avec l'ID " + idToSearchTask + " : \n" + taskId1);
+
+    displayAllTasks(allTasks);
 
 
     // USERS
