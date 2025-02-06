@@ -8,10 +8,10 @@ import static java.lang.Math.round;
 
 public class Task {
 
-  private static int count = -1;
+  private static int count;
 
   static {
-    count = -1;
+    count = 0;
   }
 
   {

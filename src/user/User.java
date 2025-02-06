@@ -3,10 +3,10 @@ package user;
 import static java.lang.Math.round;
 
 public class User {
-  private static int count = -1;
+  private static int count;
 
   static {
-    count = -1;
+    count = 0;
   }
 
   {
