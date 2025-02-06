@@ -1,28 +1,36 @@
 package task;
 
+import user.User;
+
+import java.util.Objects;
+
 import static java.lang.Math.round;
 
 public class Task {
 
-  private static double idCounter = 0; // Compteur global pour générer des IDs uniques
-  private final double id; // ID unique de chaque tâche (non statique)
+  private static int count = -1;
+
+  static {
+    count = -1;
+  }
+
+  {
+    count++;
+  }
+
+  protected final long id; // ID unique de chaque tâche (non statique)
   protected String title;
   protected String description;
   protected boolean done;
-  protected double creator;
+  protected User creator;
 
   // CONSTRUCTOR
-  public Task(String title, String description, boolean done, double creator) {
-    id = generateId(); // Génère un ID unique à chaque création d'une tâche
+  public Task(String title, String description, boolean done, User creator) {
+    id = count; // Génère un ID unique à chaque création d'une tâche
     this.title = title;
     this.description = description;
     this.done = done;
     this.creator = creator;
-  }
-
-  // ID INCREMENT
-  public static double generateId() {
-    return idCounter++; // Incrémente le compteur global
   }
 
   // GETTERS AND SETTERS
@@ -54,23 +62,35 @@ public class Task {
     this.done = done;
   }
 
-  public double getCreator() {
+  public User getCreator() {
     return creator;
   }
 
-  public void setCreator(double creator) {
+  public void setCreator(User creator) {
     this.creator = creator;
   }
 
   // TO STRING
   public String toString() {
     return String.format(
-        "Tâche avec l'id %d %n" +
+        "ID :  %d %n" +
             " Titre : %s %n" +
             " Description : %s %n" +
             " Tâche faite : %b %n" +
-            " Créateur de la tâche : %d",
-        round(id), title, description, done, round(creator)
+            " Créateur de la tâche : %s",
+        round(id), title, description, done, creator
     );
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    Task task = (Task) o;
+    return Double.compare(id, task.id) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }
