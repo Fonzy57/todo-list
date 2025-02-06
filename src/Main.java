@@ -1,60 +1,70 @@
+import access.DatabaseAccess;
 import task.Task;
+import user.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
-    ArrayList<Task> tasks = new ArrayList<>();
-    ArrayList<User> users = new ArrayList<>();
+    long idToSearchTask = 2;
+    long idToSearchUser = 1;
 
-    User steph = new User("Steph");
-    User hubert = new User("Hubert");
+    DatabaseAccess bdd = DatabaseAccess.getInstance();
 
-    Task clean = new Task(
-        "Laver la maison",
-        "Laver la maison, c'est à dire passer l'aspirateur et la serpillères",
+    // TASKS
+    List<Task> allTasks = bdd.getAllTasks();
+
+    Task taskId1 = bdd.getTaskById(idToSearchTask);
+
+    Task newTask = new Task(
+        "Dormir",
+        "Se coucher tôt pour être en forme pour le cours JAVA",
         false,
-        1
+        bdd.getUserById(0)
     );
 
-    Task cleanCar = new Task(
-        "Laver la voiture",
-        "Laver la voiture en allant à l'éléphant bleu",
-        true,
-        1
-    );
+    bdd.addTask(newTask);
 
-    Task shopping = new Task(
-        "Faire les courses",
-        "Aller à Cora pour faire les courses. Voici la liste des aliments à acheter : \n  Pomme,\n  Dinde,\n  Pâtes," +
-            "\n  Riz,\n  Pesto,\n  Pepsi,\n  Monster",
-        true,
-        2
-    );
+    bdd.deleteTaskById(0);
 
-    tasks.add(clean);
-    tasks.add(cleanCar);
-    tasks.add(shopping);
+//    System.out.println("Tâche avec l'ID " + idToSearchTask + " : \n" + taskId1);
 
-    users.add(steph);
-    users.add(hubert);
+//    displayAllTasks(allTasks);
 
 
-    getTasks(tasks);
-    getUsers(users);
+    // USERS
+    List<User> allUsers = bdd.getAllUsers();
+    displayAllUsers(allUsers);
+
+    User userId1 = bdd.getUserById(idToSearchUser);
+    User newUser = new User("Victor");
+    bdd.addUser(newUser);
+
+    displayAllUsers(allUsers);
+
+//    System.out.println("User avec l'ID " + idToSearchUser + " : \n" + userId1);
+
+    bdd.deleteUserByID(1);
+
+//    displayAllUsers(allUsers);
   }
 
-  // LISTING TASKS
-  public static void getTasks(ArrayList<Task> tasks) {
-    for (Task task : tasks) {
-      System.out.println(task + "\n");
+  // DEMANDER FLORENT SI J'ENLEVE LE STATIC ICI J'AI UNE ERREUR
+  public static void displayAllTasks(List<Task> allTasks) {
+    System.out.println("ALL TASKS : \n");
+    for (Task task : allTasks) {
+      System.out.println(task);
     }
+    System.out.println("\n ----------------------------------------------------- \n");
   }
 
-  // LISTING USERS
-  public static void getUsers(ArrayList<User> users) {
-    for (User user : users) {
-      System.out.println(user + "\n");
+  public static void displayAllUsers(List<User> allUsers) {
+    System.out.println("ALL USERS : \n");
+    for (User user : allUsers) {
+      System.out.println(user);
     }
+    System.out.println("\n ----------------------------------------------------- \n");
   }
+
 }
