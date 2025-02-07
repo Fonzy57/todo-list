@@ -9,6 +9,7 @@ import static java.lang.Math.round;
 public class DatedTask extends Task {
   private Date dueDate; // CHANGER LA DATE UTILISER LocalDate
 
+  // Constructeur pas obligatoire
   public DatedTask(String title, String description, boolean done, User creator, Date dueDate) {
     super(title, description, done, creator);
     this.dueDate = dueDate;
