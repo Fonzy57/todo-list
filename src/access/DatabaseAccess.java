@@ -1,5 +1,6 @@
 package access;
 
+import Exceptions.ElementNotFoundException;
 import task.DatedTask;
 import task.Task;
 import user.User;
@@ -79,8 +80,15 @@ public class DatabaseAccess {
   }
 
   // FIND TASK
-  public Task getTaskById(long id) {
+  public Task getTaskById(long id) throws ElementNotFoundException {
     return tasks.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    // OU
+//    for (Task task : tasks) {
+//      if (task.getId() == id) {
+//        return task;
+//      }
+//    }
+//    throw new ElementNotFoundException("La tâche avec l'ID " + id + " n'existe pas");
   }
 
   // ADD TASK
