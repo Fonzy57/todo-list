@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
-    long idToSearchTask = 2;
+    long idToSearchTask = 5;
     long idToSearchUser = 1;
 
     DatabaseAccess bdd = DatabaseAccess.getInstance();
@@ -16,7 +16,12 @@ public class Main {
     // TASKS
     List<Task> allTasks = bdd.getAllTasks();
 
-    Task taskId1 = bdd.getTaskById(idToSearchTask);
+    try {
+      Task taskId1 = bdd.getTaskById(idToSearchTask);
+      System.out.println(taskId1);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
 
     Task newTask = new Task(
         "Dormir",
@@ -37,8 +42,6 @@ public class Main {
 
     bdd.deleteTaskById(0);
 
-    System.out.println("Tâche avec l'ID " + idToSearchTask + " : \n" + taskId1);
-
     displayAllTasks(allTasks);
 
 
@@ -58,8 +61,7 @@ public class Main {
 
     displayAllUsers(allUsers);
   }
-
-  // DEMANDER FLORENT SI J'ENLEVE LE STATIC ICI J'AI UNE ERREUR
+  
   public static void displayAllTasks(List<Task> allTasks) {
     System.out.println("ALL TASKS : \n");
     for (Task task : allTasks) {
