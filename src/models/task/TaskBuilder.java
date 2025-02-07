@@ -1,6 +1,6 @@
-package task;
+package models.task;
 
-import user.User;
+import models.user.User;
 
 // TODO FAIRE UN BUILDER POUR DATEDTASK QUI HERITE CELUI CI
 

@@ -5,13 +5,13 @@
 ## 📖 Description
 
 This Java application allows managing a to-do list with users and tasks using CRUD operations (Create, Read, Update,
-Delete). Each user can have multiple associated tasks.
+Delete). Each models.user can have multiple associated tasks.
 
 ## 🛠️ Features
 
 - **User Management:** Add, edit, delete, and view users.
 - **Task Management:** Add, edit, delete, and view tasks.
-- **User-Task Association:** Each task is assigned to a specific user.
+- **User-Task Association:** Each models.task is assigned to a specific models.user.
 - **Data Storage:** Data can be stored in a database or a file.
 
 ## 📂 Project Structure
@@ -21,7 +21,7 @@ Delete). Each user can have multiple associated tasks.
 │── /src
 │   ├── models         # Entity classes (User, Task)
 │   ├── services       # CRUD operations management
-│   ├── controllers    # Interface between the user and services
+│   ├── controllers    # Interface between the models.user and services
 │   ├── database       # Data storage management
 │── /tests             # Unit tests
 │── README.md          # Project documentation

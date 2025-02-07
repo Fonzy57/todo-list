@@ -1,4 +1,4 @@
-package user;
+package models.user;
 
 import static java.lang.Math.round;
 

@@ -1,9 +1,9 @@
-package access;
+package services;
 
-import Exceptions.ElementNotFoundException;
-import task.DatedTask;
-import task.Task;
-import user.User;
+import exceptions.ElementNotFoundException;
+import models.task.DatedTask;
+import models.task.Task;
+import models.user.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,9 +83,9 @@ public class DatabaseAccess {
   public Task getTaskById(long id) throws ElementNotFoundException {
     return tasks.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
     // OU
-//    for (Task task : tasks) {
-//      if (task.getId() == id) {
-//        return task;
+//    for (Task models.task : tasks) {
+//      if (models.task.getId() == id) {
+//        return models.task;
 //      }
 //    }
 //    throw new ElementNotFoundException("La tâche avec l'ID " + id + " n'existe pas");

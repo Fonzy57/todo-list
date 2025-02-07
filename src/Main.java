@@ -1,9 +1,8 @@
-import access.DatabaseAccess;
-import task.Task;
-import task.TaskBuilder;
-import user.User;
+import services.DatabaseAccess;
+import models.task.Task;
+import models.task.TaskBuilder;
+import models.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -61,7 +60,7 @@ public class Main {
 
     displayAllUsers(allUsers);
   }
-  
+
   public static void displayAllTasks(List<Task> allTasks) {
     System.out.println("ALL TASKS : \n");
     for (Task task : allTasks) {
