@@ -2,6 +2,8 @@ package task;
 
 import user.User;
 
+// TODO FAIRE UN BUILDER POUR DATEDTASK
+
 public class TaskBuilder {
   protected String title;
   protected String description;
