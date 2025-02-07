@@ -2,7 +2,7 @@ package task;
 
 import user.User;
 
-// TODO FAIRE UN BUILDER POUR DATEDTASK
+// TODO FAIRE UN BUILDER POUR DATEDTASK QUI HERITE CELUI CI
 
 public class TaskBuilder {
   protected String title;
