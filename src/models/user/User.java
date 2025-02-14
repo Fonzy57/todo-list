@@ -15,10 +15,20 @@ public class User {
 
   private final long id; // ID unique de chaque tâche (non statique)
   private String firstName;
+  private String lastName;
 
-  public User(String firstName) {
+  public User(String firstName, String lastName) {
     id = count; // Génère un ID unique à chaque création d'une tâche
     this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   // GETTERS AND SETTERS
@@ -37,9 +47,10 @@ public class User {
   // TO STRING
   public String toString() {
     return String.format(
-        "USER : %n" +
-            " ID: %d%n" +
-            " First Name: %s%n", round(id), firstName
+        "USER : " +
+            " ID: %d" +
+            " First Name: %s," +
+            " Last Name: %s%n", round(id), firstName, lastName
     );
   }
 }
