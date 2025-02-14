@@ -1,3 +1,5 @@
+[//]: # (TODO REFAIRE LE README QUAND J'AURAIS FINI LE PROJET)
+
 # 📌 Application To-Do List - Gestion des Tâches et Utilisateurs
 
 [🇬🇧 Read this document in English](README.md)
