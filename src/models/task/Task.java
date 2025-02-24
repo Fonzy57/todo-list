@@ -28,8 +28,12 @@ public class Task {
   }
 
   // GETTERS AND SETTERS
-  public double getId() {
+  public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getTitle() {
