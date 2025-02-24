@@ -128,6 +128,12 @@ public class DatabaseAccess {
     return users;
   }
 
+  /**
+   * Récupère un utilisateur en BDD selon son ID
+   *
+   * @param id ID de l'utilisateur à récupérer
+   * @return Retourne un utilisateur
+   */
   public User getUserById(long id) {
     User user = null;
 
@@ -147,6 +153,33 @@ public class DatabaseAccess {
     }
 
     return user;
+  }
+
+  /**
+   * Modifie un utilisateur éxistant
+   *
+   * @param user Utilisateur
+   */
+  public void updateUser(User user) {
+    if (user.getId() == null) {
+      addUser(user); // Si l'ID est null, c'est un nouvel utilisateur, donc on l'ajoute
+      return;
+    }
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(UPDATE_USER);
+      stmt.setString(1, user.getFirstName());
+      stmt.setString(2, user.getLastName());
+      stmt.setLong(3, user.getId());
+
+      int rowsUpdated = stmt.executeUpdate();
+      if (rowsUpdated == 0) {
+        System.err.println("Aucun utilisateur mis à jour, ID inexistant.");
+      }
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
   }
 
 
@@ -175,6 +208,11 @@ public class DatabaseAccess {
     }
   }
 
+  /**
+   * Méthode qui permet de récupérer toutes les tâches
+   *
+   * @return Une liste de tâches
+   */
   public List<Task> getTasks() {
     List<Task> tasks = new ArrayList<>();
     try {
@@ -199,6 +237,36 @@ public class DatabaseAccess {
     }
 
     return tasks;
+  }
+
+  /**
+   * Récupère une tâche en BDD selon son ID
+   *
+   * @param id ID de la tâche à récupérer
+   * @return Retourne une tâche
+   */
+  public Task getTaskById(long id) {
+    Task task = null;
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(GET_TASK);
+      stmt.setLong(1, id);
+      ResultSet result = stmt.executeQuery();
+      if (result.next()) {
+        Long idInBdd = result.getLong("id");
+        String title = result.getString("title");
+        String description = result.getString("description");
+        boolean done = result.getBoolean("done");
+        Long creatorId = result.getLong("creator_id");
+        User creator = getUserById(creatorId);
+
+        task = new Task(idInBdd, title, description, done, creator);
+      }
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+
+    return task;
   }
 
 }
