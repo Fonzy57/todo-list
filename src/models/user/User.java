@@ -3,24 +3,19 @@ package models.user;
 import static java.lang.Math.round;
 
 public class User {
-  private static int count;
 
-  static {
-    count = 0;
-  }
-
-  {
-    count++;
-  }
-
-  private final long id; // ID unique de chaque tâche (non statique)
+  private Long id;
   private String firstName;
   private String lastName;
 
   public User(String firstName, String lastName) {
-    id = count; // Génère un ID unique à chaque création d'une tâche
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  public User(Long id, String firstName, String lastName) {
+    this(firstName, lastName);
+    this.id = id;
   }
 
   public String getLastName() {
