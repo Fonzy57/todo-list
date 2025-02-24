@@ -8,17 +8,7 @@ import static java.lang.Math.round;
 
 public class Task {
 
-  private static int count;
-
-  static {
-    count = 0;
-  }
-
-  {
-    count++;
-  }
-
-  protected final long id; // ID unique de chaque tâche (non statique)
+  protected Long id;
   protected String title;
   protected String description;
   protected boolean done;
@@ -26,11 +16,15 @@ public class Task {
 
   // CONSTRUCTOR
   public Task(String title, String description, boolean done, User creator) {
-    id = count; // Génère un ID unique à chaque création d'une tâche
     this.title = title;
     this.description = description;
     this.done = done;
     this.creator = creator;
+  }
+
+  public Task(Long id, String title, String description, boolean done, User creator) {
+    this(title, description, done, creator);
+    this.id = id;
   }
 
   // GETTERS AND SETTERS
@@ -70,17 +64,28 @@ public class Task {
     this.creator = creator;
   }
 
-  // TO STRING
+  @Override
   public String toString() {
-    return String.format(
-        "ID :  %d %n" +
-            " Titre : %s %n" +
-            " Description : %s %n" +
-            " Tâche faite : %b %n" +
-            " Créateur de la tâche : %s",
-        round(id), title, description, done, creator
-    );
+    return "Task{" +
+        "id=" + id +
+        ", title='" + title + '\'' +
+        ", description='" + description + '\'' +
+        ", done=" + done +
+        ", creator=" + creator +
+        '}';
   }
+
+  // TO STRING
+//  public String toString() {
+//    return String.format(
+//        "ID :  %d %n" +
+//            " Titre : %s %n" +
+//            " Description : %s %n" +
+//            " Tâche faite : %b %n" +
+//            " Créateur de la tâche : %s",
+//        id, title, description, done, creator
+//    );
+//  }
 
   @Override
   public boolean equals(Object o) {

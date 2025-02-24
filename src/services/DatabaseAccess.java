@@ -1,13 +1,10 @@
 package services;
 
-import exceptions.ElementNotFoundException;
-import models.task.DatedTask;
 import models.task.Task;
 import models.user.User;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DatabaseAccess {
@@ -73,10 +70,15 @@ public class DatabaseAccess {
   // --- USERS ---
   // -------------
 
+  /**
+   * Ajoute un utilisateur en BDD
+   *
+   * @param user Utilisateur a passé en paramètre
+   */
   public void addUser(User user) {
     try {
       // Requête préparée
-      PreparedStatement statement = connection.prepareStatement(CREATE_USER);
+      PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
 
       // Équivalent au bind value
       statement.setString(1, user.getFirstName());
@@ -85,16 +87,28 @@ public class DatabaseAccess {
       // On exécute la requête
       statement.executeUpdate();
 
+      // Récupérer l'ID généré par la base de données
+      // TODO DEMANDER A FLORENT POURQUOI IL FAUT RECUPERER L'ID DIRECTEMENT
+      ResultSet generatedKeys = statement.getGeneratedKeys();
+      if (generatedKeys.next()) {
+        user.setId(generatedKeys.getLong(1)); // Assigner l'ID généré à l'utilisateur
+      }
+
     } catch (SQLException e) {
       System.err.println(e.getMessage());
     }
   }
 
+  /**
+   * Récupère tous les utilisateurs en BDD
+   *
+   * @return Une liste de tous les utilisateurs
+   */
   public List<User> getUsers() {
     List<User> users = new ArrayList<>();
     try {
       Statement stmt = connection.createStatement();
-      ResultSet result = stmt.executeQuery(GET_USER);
+      ResultSet result = stmt.executeQuery(LIST_USERS);
 
       while (result.next()) {
         Long id = result.getLong("id");
@@ -114,9 +128,77 @@ public class DatabaseAccess {
     return users;
   }
 
+  public User getUserById(long id) {
+    User user = null;
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(GET_USER);
+      stmt.setLong(1, id);
+      ResultSet result = stmt.executeQuery();
+      if (result.next()) {
+        Long idInBdd = result.getLong("id");
+        String firstName = result.getString("firstName");
+        String lastName = result.getString("lastName");
+
+        user = new User(idInBdd, firstName, lastName);
+      }
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+
+    return user;
+  }
+
 
   // -------------
   // --- TASKS ---
   // -------------
+
+  /**
+   * Ajout d'une tâche en BDD
+   *
+   * @param task Tâche à lui passer en paramètre
+   */
+  public void addTask(Task task) {
+    try {
+      PreparedStatement statement = connection.prepareStatement(CREATE_TASK);
+
+      statement.setString(1, task.getTitle());
+      statement.setString(2, task.getDescription());
+      statement.setBoolean(3, task.isDone());
+      statement.setLong(4, task.getCreator().getId());
+
+      statement.executeUpdate();
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+  }
+
+  public List<Task> getTasks() {
+    List<Task> tasks = new ArrayList<>();
+    try {
+      Statement stmt = connection.createStatement();
+      ResultSet result = stmt.executeQuery(LIST_TASKS);
+      while (result.next()) {
+        Long id = result.getLong("id");
+        String title = result.getString("title");
+        String description = result.getString("description");
+        boolean done = result.getBoolean("done");
+        Long creatorId = result.getLong("creator_id");
+
+        User creator = getUserById(creatorId);
+
+        Task task = new Task(id, title, description, done, creator);
+
+        tasks.add(task);
+      }
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+
+    return tasks;
+  }
 
 }

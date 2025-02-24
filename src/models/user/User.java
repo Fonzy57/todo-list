@@ -27,8 +27,12 @@ public class User {
   }
 
   // GETTERS AND SETTERS
-  public long getId() {
+  public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getFirstName() {

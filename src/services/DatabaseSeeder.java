@@ -14,7 +14,7 @@ import java.util.Random;
 public class DatabaseSeeder {
   public void seed() {
     DatabaseAccess dba = DatabaseAccess.getInstance();
-    List<User> users = generateUsers(100);
+    List<User> users = generateUsers(10);
     users.forEach(dba::addUser);
 
     List<Task> tasks = generateTasks(20, users);
