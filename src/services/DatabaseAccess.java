@@ -299,4 +299,36 @@ public class DatabaseAccess {
     }
   }
 
+  /**
+   * Permet de récupérer les tâches ayant le status done à true
+   *
+   * @return Liste de tâches faites
+   */
+  public List<Task> getTasksDone() {
+    List<Task> tasks = new ArrayList<>();
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(LIST_TASKS_DONE);
+      stmt.setBoolean(1, true);
+
+      ResultSet result = stmt.executeQuery();
+
+      while (result.next()) {
+        Long id = result.getLong("id");
+        String title = result.getString("title");
+        String description = result.getString("description");
+        boolean done = result.getBoolean("done");
+        Long creatorId = result.getLong("creator_id");
+        User creator = getUserById(creatorId);
+        Task task = new Task(id, title, description, done, creator);
+        tasks.add(task);
+      }
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+
+    return tasks;
+  }
+
 }
