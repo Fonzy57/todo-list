@@ -269,4 +269,34 @@ public class DatabaseAccess {
     return task;
   }
 
+  /**
+   * Modifie une tâche éxistante
+   *
+   * @param task Tâche à mettre en paramètre
+   */
+  public void updateTask(Task task) {
+    if (task.getId() == null) {
+      addTask(task); // Si l'ID est null, c'est un nouvel utilisateur, donc on l'ajoute
+      return;
+    }
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(UPDATE_TASK);
+      stmt.setString(1, task.getTitle());
+      stmt.setString(2, task.getDescription());
+      stmt.setBoolean(3, task.isDone());
+      stmt.setLong(4, task.getId());
+
+      stmt.executeUpdate();
+
+      int rowsUpdated = stmt.executeUpdate();
+      if (rowsUpdated == 0) {
+        System.err.println("Aucune tâche mise à jour, ID inexistant.");
+      }
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+  }
+
 }
