@@ -1,100 +1,74 @@
-import me.xdrop.jrand.JRand;
-import me.xdrop.jrand.generators.person.FirstnameGenerator;
-import me.xdrop.jrand.generators.person.LastnameGenerator;
+import org.h2.tools.Server;
 import services.DatabaseAccess;
 import models.task.Task;
-import models.task.TaskBuilder;
 import models.user.User;
 import services.DatabaseSeeder;
 
+import java.sql.SQLException;
 import java.util.List;
 
 // TODO ESSAYER DE FAIRE LES TYPES GENERIQUES POUR LES TASKS ET USERS
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SQLException {
+
+    DatabaseAccess dba = DatabaseAccess.getInstance();
 
     DatabaseSeeder dbSeeder = new DatabaseSeeder();
     dbSeeder.seed();
 
-    DatabaseAccess dba = DatabaseAccess.getInstance();
-
-    var users = dba.getAllUsers();
+    List<User> users = dba.getUsers();
     System.out.println(users);
 
-    var tasks = dba.getAllTasks();
+    User user = dba.getUserById(5);
+    if (user != null) {
+      System.out.println("Avant modification : " + user);
+
+      // Modifier les informations
+      user.setFirstName("TINTIN");
+      user.setLastName("MILOU");
+
+      // Enregistrer la mise à jour
+      dba.updateUser(user);
+
+      // Vérifier après mise à jour
+      User updatedUser = dba.getUserById(5);
+      System.out.println("Après modification : " + updatedUser);
+    } else {
+      System.err.println("L'utilisateur avec l'ID 5 n'existe pas.");
+    }
+
+    List<Task> tasks = dba.getTasks();
     System.out.println(tasks);
 
+    List<Task> tasksDone = dba.getTasksDone();
+    System.out.println("\u001B[32m" + tasksDone + "\u001B[0m");
+
+    Task task = dba.getTaskById(3);
+    System.out.println(task);
+    if (task != null) {
+      System.out.println("Avant modification : " + task);
+
+      // Modifier les informations
+      task.setDescription("Aucune description");
+      task.setTitle("Aucun titre");
+
+      // Enregistrer la mise à jour
+      dba.updateTask(task);
+
+      // Vérifier après mise à jour
+      Task updatedTask = dba.getTaskById(3);
+      System.out.println("Après modification : " + updatedTask);
+    } else {
+      System.err.println("La tâche avec l'ID 5 n'existe pas.");
+    }
+
+    Server server = Server.createWebServer();
+
+    server.start();
+    while (true) {
+    }
+    // server.shutdown();
 
   }
-
-
-//    DatabaseAccess bdd = DatabaseAccess.getInstance();
-//
-//    // TASKS
-//    List<Task> allTasks = bdd.getAllTasks();
-//
-//    try {
-//      Task taskId1 = bdd.getTaskById(idToSearchTask);
-//      System.out.println(taskId1);
-//    } catch (Exception e) {
-//      System.out.println(e.getMessage());
-//    }
-//
-//    Task newTask = new Task(
-//        "Dormir",
-//        "Se coucher tôt pour être en forme pour le cours JAVA",
-//        false,
-//        bdd.getUserById(0)
-//    );
-//
-//    Task testBuilder = new TaskBuilder()
-//        .setCreator(bdd.getUserById(0))
-//        .setDone(true)
-//        .setTitle("Mon titre")
-//        .setDescription("Ma description")
-//        .build();
-//
-//    bdd.addTask(newTask);
-//    bdd.addTask(testBuilder);
-//
-//    bdd.deleteTaskById(0);
-//
-////    displayAllTasks(allTasks);
-//
-//
-//    // USERS
-//    List<User> allUsers = bdd.getAllUsers();
-////    displayAllUsers(allUsers);
-//
-//    User userId1 = bdd.getUserById(idToSearchUser);
-//    User newUser = new User("Victor");
-//    bdd.addUser(newUser);
-//
-////    displayAllUsers(allUsers);
-//
-////    System.out.println("User avec l'ID " + idToSearchUser + " : \n" + userId1);
-////
-//    bdd.deleteUserByID(1);
-//
-////    displayAllUsers(allUsers);
-//  }
-//
-//  public static void displayAllTasks(List<Task> allTasks) {
-//    System.out.println("ALL TASKS : \n");
-//    for (Task task : allTasks) {
-//      System.out.println(task);
-//    }
-//    System.out.println("\n ----------------------------------------------------- \n");
-//  }
-//
-//  public static void displayAllUsers(List<User> allUsers) {
-//    System.out.println("ALL USERS : \n");
-//    for (User user : allUsers) {
-//      System.out.println(user);
-//    }
-//    System.out.println("\n ----------------------------------------------------- \n");
-//  }
-
-
 }
