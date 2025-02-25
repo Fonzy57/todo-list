@@ -15,10 +15,19 @@ public class Task {
   protected User creator;
 
   // CONSTRUCTOR
-  public Task(String title, String description, boolean done, User creator) {
+  public Task(String title, String description, boolean done) {
     this.title = title;
     this.description = description;
     this.done = done;
+  }
+
+  public Task(Long id, String title, String description, boolean done) {
+    this(title, description, done);
+    this.id = id;
+  }
+
+  public Task(String title, String description, boolean done, User creator) {
+    this(title, description, done);
     this.creator = creator;
   }
 
