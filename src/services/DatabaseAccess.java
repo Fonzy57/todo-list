@@ -88,7 +88,6 @@ public class DatabaseAccess {
       statement.executeUpdate();
 
       // Récupérer l'ID généré par la base de données
-      // TODO DEMANDER A FLORENT POURQUOI IL FAUT RECUPERER L'ID DIRECTEMENT
       ResultSet generatedKeys = statement.getGeneratedKeys();
       if (generatedKeys.next()) {
         user.setId(generatedKeys.getLong(1)); // Assigner l'ID généré à l'utilisateur
@@ -199,7 +198,11 @@ public class DatabaseAccess {
       statement.setString(1, task.getTitle());
       statement.setString(2, task.getDescription());
       statement.setBoolean(3, task.isDone());
-      statement.setLong(4, task.getCreator().getId());
+      if (task.getCreator() != null) {
+        statement.setLong(4, task.getCreator().getId());
+      } else {
+        statement.setNull(4, Types.BIGINT);
+      }
 
       statement.executeUpdate();
 
@@ -225,6 +228,7 @@ public class DatabaseAccess {
         boolean done = result.getBoolean("done");
         Long creatorId = result.getLong("creator_id");
 
+        // Pas la bonne méthode car requête SQL à chaque itération
         User creator = getUserById(creatorId);
 
         Task task = new Task(id, title, description, done, creator);
@@ -258,6 +262,8 @@ public class DatabaseAccess {
         String description = result.getString("description");
         boolean done = result.getBoolean("done");
         Long creatorId = result.getLong("creator_id");
+
+        // TODO FAIRE UNE CONDITION POUR VERIFIER SI L'ID N'EST PAS NULL
         User creator = getUserById(creatorId);
 
         task = new Task(idInBdd, title, description, done, creator);
