@@ -10,20 +10,9 @@ public class Request {
   private String protocol;
   private Map<String, String> headers = new HashMap<>();
 
-//  public Request(String method, String path, String protocol, Map<String, String> headers) {
-//    this.method = method;
-//    this.path = path;
-//    this.protocol = protocol;
-//    this.headers = headers;
-
-  public Map<String, String> getHeaders() {
-    return headers;
-  }
-
   public void setHeaders(Map<String, String> headers) {
     this.headers = headers;
   }
-//  }
 
   public String getMethod() {
     return method;
@@ -47,6 +36,19 @@ public class Request {
 
   public void setProtocol(String protocol) {
     this.protocol = protocol;
+  }
+
+  public Map<String, String> getHeaders() {
+    return headers;
+  }
+
+  // TODO VOIR POUR PASSER UN HEADER POUR L'ID
+  public void addHeader(String key, String value) {
+    this.headers.put(key, value);
+  }
+
+  public String getHeader(String key) {
+    return this.headers.get(key);
   }
 
 
