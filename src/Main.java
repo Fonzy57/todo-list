@@ -1,16 +1,14 @@
-import server.Request;
+import org.h2.tools.Server;
+import server.ClientHandler;
 import services.DatabaseAccess;
 import services.DatabaseSeeder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
-// TODO ESSAYER DE FAIRE LES TYPES GENERIQUES POUR LES TASKS ET USERS
+// TODO ESSAYER DE FAIRE LES TYPES GÉNÉRIQUES POUR LES TASKS ET USERS
 
 public class Main {
   public static void main(String[] args) throws SQLException, IOException {
@@ -18,9 +16,16 @@ public class Main {
     DatabaseAccess dba = DatabaseAccess.getInstance();
 
     DatabaseSeeder dbSeeder = new DatabaseSeeder();
-    // dbSeeder.seed();
+    dbSeeder.seed();
 
-//    List<User> users = dba.getUsers();
+    try (ServerSocket server = new ServerSocket(8080)) {
+      while (true) {
+        Socket client = server.accept();
+        ClientHandler clientHandler = new ClientHandler();
+        clientHandler.handle(client);
+      }
+    }
+
 //    System.out.println(users);
 //
 //    User user = dba.getUserById(5);
@@ -74,46 +79,6 @@ public class Main {
 //    while (true) {
 //    }
     // server.shutdown();
-
-    try (ServerSocket server = new ServerSocket(8080)) {
-
-      Socket client = server.accept();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-      Request request = new Request();
-
-      String firstLine = reader.readLine();
-      System.out.println(firstLine);
-
-      String[] splitFirstLine = firstLine.split(" ");
-
-      request.setMethod(splitFirstLine[0]);
-      request.setPath(splitFirstLine[1]);
-      request.setProtocol(splitFirstLine[2]);
-
-      String line;
-      while (!(line = reader.readLine()).isBlank()) {
-        var h = line.split(": ");
-        request.getHeaders().put(h[0], h[1]);
-      }
-
-      System.out.println(request);
-
-      // Permet de répondre au client (le navigateur ou ordinateur)
-      OutputStream outputStream = client.getOutputStream();
-
-      var responseFirstLine = "HTTP/1.1 200\r\n";
-      outputStream.write(responseFirstLine.getBytes());
-      outputStream.write("Content-Type: text/html\r\n".getBytes());
-
-      outputStream.write("\r\n".getBytes());
-      outputStream.write("<html><body><h1>Hello world</h1></body></html>".getBytes());
-
-      outputStream.write("\r\n\r\n".getBytes());
-      outputStream.flush();
-
-      reader.close();
-      client.close();
-    }
 
   }
 }
