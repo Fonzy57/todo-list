@@ -1,14 +1,24 @@
 package server;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Request {
   private String method;
   private String path;
   private String protocol;
   private Map<String, String> headers = new HashMap<>();
+  private Map<String, String> params = new HashMap<>();
+
+  public Map<String, String> getParams() {
+    if (params == null) {
+      return new HashMap<>();
+    }
+    return params;
+  }
 
   public void setHeaders(Map<String, String> headers) {
     this.headers = headers;
@@ -27,7 +37,18 @@ public class Request {
   }
 
   public void setPath(String path) {
-    this.path = path;
+    var realPath = path;
+    if (path.contains("?")) {
+      var split = path.split("\\?");
+      realPath = split[0];
+
+      params = Arrays
+          .stream(split[1].split("&"))
+          .map(s -> s.split("="))
+          .collect(Collectors.toMap(s -> s[0], s -> s[1]));
+    }
+
+    this.path = realPath;
   }
 
   public String getProtocol() {
