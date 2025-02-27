@@ -118,17 +118,43 @@ public class Router {
       ".task-container:hover {\n" +
       "  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),\n" +
       "    0 8px 10px -6px rgb(0 0 0 / 0.1)\n" +
+      "}" +
+      ".one-task-container {\n" +
+      "  display: flex;\n" +
+      "  flex-direction: column;\n" +
+      "  align-items: flex-start;\n" +
+      "  gap: 8px;\n" +
+      "  margin-top: 20px;\n" +
+      "}" +
+      ".green {\n" +
+      "  color: #019a4a;\n" +
+      "  font-weight: bold;\n" +
+      "}\n" +
+      "\n" +
+      ".red {\n" +
+      "  color: #ff0000;\n" +
+      "  font-weight: bold;\n" +
+      "}" +
+      ".underline {\n" +
+      "  text-decoration: underline;\n" +
+      "}" +
+      ".bold {\n" +
+      "  font-weight: bold;\n" +
       "}";
 
   public void route(Socket client, Request request) throws IOException {
+
     switch (request.getPath()) {
       case "/users":
         handleUsersPath(client);
         break;
+
+      case "/users.json":
+        handleUsersJson(client);
+        break;
       case "/tasks":
         handleTasks(client);
         break;
-      // TODO VOIR POUR CHANGER LA REQUETE ET RECUP ID PAGE
       case "/task":
         handleOneTask(client, request);
         break;
@@ -153,7 +179,6 @@ public class Router {
     var responseFirstLine = "HTTP/1.1 200\r\n";
     outputStream.write(responseFirstLine.getBytes());
     outputStream.write("Content-Type: text/html\r\n".getBytes());
-
     outputStream.write("\r\n".getBytes());
 
     StringBuilder myHtmlBuilder = new StringBuilder();
@@ -182,6 +207,43 @@ public class Router {
 
     outputStream.write(myHtmlBuilder.toString().getBytes());
 
+    outputStream.write("\r\n\r\n".getBytes());
+    outputStream.flush();
+    outputStream.close();
+  }
+
+
+  // ICI EXEMPLE D'UN RENVOIE AU FORMAT JSON SUR L'URL /users.json
+  public void handleUsersJson(Socket client) throws IOException {
+    OutputStream outputStream = client.getOutputStream();
+
+    var responseFirstLine = "HTTP/1.1 200\r\n";
+    outputStream.write(responseFirstLine.getBytes());
+    outputStream.write("Content-Type: application/json\r\n".getBytes());
+
+    outputStream.write("\r\n".getBytes());
+
+    List<User> users = dba.getUsers();
+
+    StringBuilder myJson = new StringBuilder();
+    myJson.append("[");
+    for (User user : users) {
+      myJson.append("{\r\n");
+      myJson.append("  \"id\": ");
+      myJson.append(user.getId());
+      myJson.append(",\r\n");
+      myJson.append("  \"firstName\":\" ");
+      myJson.append(user.getFirstName());
+      myJson.append("\",\r\n");
+      myJson.append("  \"lastName\":\" ");
+      myJson.append(user.getLastName());
+      myJson.append("\",\r");
+      myJson.append("\r\n}\r\n");
+    }
+
+    myJson.append("]");
+
+    outputStream.write(myJson.toString().getBytes());
     outputStream.write("\r\n\r\n".getBytes());
     outputStream.flush();
     outputStream.close();
@@ -300,9 +362,7 @@ public class Router {
    */
   private void handleOneTask(Socket client, Request request) throws IOException {
     OutputStream outputStream = client.getOutputStream();
-
-    // TODO VOIR SI J'AI L'ID QUELQUE PART
-    System.out.println("REQUEST HANDLE ONE : " + request);
+    var taskId = request.getParams().get("id");
 
     var responseFirstLine = "HTTP/1.1 200\r\n";
     outputStream.write(responseFirstLine.getBytes());
@@ -310,7 +370,11 @@ public class Router {
 
     outputStream.write("\r\n".getBytes());
 
-    // Task task = dba.getTaskById(1);
+    Task task = dba.getTaskById(Long.parseLong(taskId));
+    User user = dba.getUserById(task.getCreator().getId());
+
+    String doneString = task.isDone() ? "<span class=\"green\">est faite</span>" : "<span class=\"red\">n'est pas " +
+        "faite</span>";
 
     StringBuilder myHtmlBuilder = new StringBuilder();
     myHtmlBuilder.append("<!DOCTYPE html>\r\n");
@@ -324,7 +388,14 @@ public class Router {
                              "</style>" +
                              "</head>");
     myHtmlBuilder.append("<body>");
-    myHtmlBuilder.append("<h1 class=\"title\">Une tâche avec l'ID : " + "AFFICHER L'ID " + "</h1>");
+    myHtmlBuilder.append("<div class=\"one-task-container container\">\n");
+    myHtmlBuilder.append("<h1 class=\"title\">Tâche : " + task.getTitle() + "</h1>");
+    myHtmlBuilder.append("<p class=\"\"><span class=\"underline bold\">Description :</span> " + task.getDescription() +
+                             "</p>");
+    myHtmlBuilder.append("<p class=\"\">La tâche " + doneString + "</p>");
+    myHtmlBuilder.append("<p class=\"\">Tâche à faire par : " + user.getFirstName() + " " + user.getLastName().toUpperCase() +
+                             "</p>");
+    myHtmlBuilder.append("</div>");
 
     myHtmlBuilder.append("<div class=\"button-container\">\n");
     myHtmlBuilder.append("<a href=\"/\" class=\"button button-primary\">Accueil</a>");
@@ -350,7 +421,7 @@ public class Router {
   private void handle404(Socket client) throws IOException {
     OutputStream outputStream = client.getOutputStream();
 
-    var responseFirstLine = "HTTP/1.1 200\r\n";
+    var responseFirstLine = "HTTP/1.1 404\r\n";
     outputStream.write(responseFirstLine.getBytes());
     outputStream.write("Content-Type: text/html\r\n".getBytes());
     outputStream.write("\r\n".getBytes());
